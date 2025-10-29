@@ -9,9 +9,10 @@ import path from 'node:path';
  * @typedef {'fast' | 'real'} LightnetType
  * @typedef {'none' | 'full'} LightnetProofLevel
  * @typedef {'master' | 'compatible' | 'develop'} LightnetMinaBranch
+ * @typedef {'stable' | 'experimental' } LightnetRelease
  * @typedef {'Spam' | 'Trace' | 'Debug' | 'Info' | 'Warn' | 'Error' | 'Fatal'} LightnetMinaLogLevel
  *
- * @type {{ uiTypes: UiType[], exampleTypes: ExampleType[], feePayerCacheDir: string, networkIds: NetworkId[], lightnetWorkDir: string, lightnetModes: LightnetMode[], lightnetTypes: LightnetType[], lightnetProofLevels: LightnetProofLevel[], lightnetMinaBranches: LightnetMinaBranch[], lightnetProcessToLogFileMapping: Map<string, string>, lightnetMinaProcessesLogLevels: LightnetMinaLogLevel[], lightnetMinaDaemonGraphQlEndpoint: string, lightnetAccountManagerEndpoint: string, lightnetArchiveNodeApiEndpoint: string }}
+ * @type {{ uiTypes: UiType[], exampleTypes: ExampleType[], feePayerCacheDir: string, networkIds: NetworkId[], lightnetWorkDir: string, lightnetModes: LightnetMode[], lightnetTypes: LightnetType[], lightnetProofLevels: LightnetProofLevel[], lightnetMinaBranches: LightnetMinaBranch[], lightnetRelease: LightnetRelease[], lightnetProcessToLogFileMapping: Map<string, string>, lightnetMinaProcessesLogLevels: LightnetMinaLogLevel[], lightnetMinaDaemonGraphQlEndpoint: string, lightnetAccountManagerEndpoint: string, lightnetArchiveNodeApiEndpoint: string }}
  */
 const Constants = Object.freeze({
   uiTypes: ['next', 'svelte', 'nuxt', 'empty', 'none'],
@@ -23,6 +24,7 @@ const Constants = Object.freeze({
   lightnetTypes: ['fast', 'real'],
   lightnetProofLevels: ['none', 'full'],
   lightnetMinaBranches: ['master', 'compatible', 'develop'],
+  lightnetRelease: ['stable', 'experimental'],
   lightnetProcessToLogFileMapping: new Map([
     ['Archive-Node-API application', 'logs/archive-node-api.log'],
     ['Mina Archive process', 'logs/archive-node.log,archive/log.txt'],

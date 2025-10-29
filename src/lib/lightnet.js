@@ -116,6 +116,7 @@ const { quotes, escapeQuotes } = getSystemQuotes();
  * @param {string}  argv.type - The type of lightnet to start.
  * @param {string}  argv.proofLevel - The proof level to use.
  * @param {string}  argv.minaBranch - The Mina branch to use.
+ * @param {string}  argv.release - The release to use.
  * @param {boolean} argv.archive - Whether to start the Mina Archive process and the Archive-Node-API application.
  * @param {boolean} argv.sync - Whether to wait for the network to sync.
  * @param {boolean} argv.pull - Whether to pull the latest version of the Docker image from the Docker Hub.
@@ -128,6 +129,7 @@ async function lightnetStart({
   type,
   proofLevel,
   minaBranch,
+  release,
   archive,
   sync,
   pull,
@@ -136,6 +138,10 @@ async function lightnetStart({
 }) {
   let containerId = null;
   let containerVolume = null;
+  let minaLocalNetworkDocker = `o1labs/mina-local-network:${minaBranch}-latest-${
+    type === 'fast' ? 'lightnet' : 'devnet'
+  }${release === 'stable' ? '' : '-experimental'}`;
+
   await checkDockerEngineAvailability();
   await step('Checking prerequisites', async () => {
     await handleStartCommandChecks(lightnetDockerContainerName, mode, archive);
@@ -149,11 +155,7 @@ async function lightnetStart({
   );
   if (pull) {
     await step('Pulling the corresponding Docker image', async () => {
-      await executeCmd(
-        `docker pull o1labs/mina-local-network:${minaBranch}-latest-${
-          type === 'fast' ? 'lightnet' : 'devnet'
-        }`
-      );
+      await executeCmd(`docker pull ${minaLocalNetworkDocker}`);
       await removeDanglingDockerImages();
     });
   }
@@ -168,9 +170,7 @@ async function lightnetStart({
           `--env RUN_ARCHIVE_NODE="${archive}" ` +
           `--env SLOT_TIME="${slotTime}" ` +
           getDockerContainerStartupCmdPorts(mode, archive) +
-          `o1labs/mina-local-network:${minaBranch}-latest-${
-            type === 'fast' ? 'lightnet' : 'devnet'
-          }`
+          `${minaLocalNetworkDocker}`
       );
       containerId = await getDockerContainerId(lightnetDockerContainerName);
       containerVolume = await getDockerContainerVolume(
@@ -1411,7 +1411,7 @@ function printCmdDebugLog(command, stdOut, stdErr) {
   if (stdErr) {
     logMessage += chalk.reset(`\nStdErr:\n%o`);
   }
-  debugLog(logMessage, stdOut, stdErr);
+  console.log(logMessage, stdOut, stdErr);
 }
 
 async function shellExec(command, options = {}) {

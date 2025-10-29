@@ -170,7 +170,7 @@ function lightnetCli() {
       yargs
         .command(
           [
-            'start [mode] [type] [proof-level] [mina-branch] [archive] [sync] [pull] [mina-log-level]',
+            'start [mode] [type] [proof-level] [mina-branch] [release] [archive] [sync] [pull] [mina-log-level]',
           ],
           'Start the lightweight Mina blockchain network Docker container.',
           {
@@ -213,6 +213,16 @@ function lightnetCli() {
               default: 'compatible',
               description:
                 'One of the major Mina repository branches the Docker image artifacts were compiled against.',
+            },
+            release: {
+              alias: 'r',
+              demand: false,
+              string: true,
+              hidden: false,
+              choices: Constants.lightnetRelease,
+              default: 'stable',
+              description:
+                'Release to use. There should be no difference between releases at this moment. Only internals are affected. stable - battle-tested release, which soon will be obsolete, experimental - most recent build, which may be unstable.',
             },
             archive: {
               alias: 'a',
